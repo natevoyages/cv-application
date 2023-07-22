@@ -1,18 +1,18 @@
+import { useState } from "react";
+
 function Contact({nameStateFn, emailStateFn,
-   phoneStateFn, submited, submitSetter, nameState,
-  emailState,
-  phoneState }){
+   phoneStateFn, status, submitSetter}){
   
-  let name = nameState;
-  let email = emailState;
-  let phone = phoneState;
+    const[name, setName] = useState('');
+    const[email, setEmail] = useState('');
+    const[phone, setPhone] = useState('');
   const handleNameChange = (e) => {
-    name = e.target.value;
+     setName(e.target.value);
   }
   const handleEmailChange = (e) => {
-    email = e.target.value;  }
+    setEmail(e.target.value);  }
   const handlePhoneChange = (e) => {
-    phone = e.target.value;  }
+    setPhone(e.target.value);  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -20,23 +20,25 @@ function Contact({nameStateFn, emailStateFn,
     emailStateFn(email);
     phoneStateFn(phone);
     submitSetter();
+
   }
 
   return(
   <form onSubmit={handleSubmit}>
     <legend>Contact Info</legend>
+    {(status == 'pending' || status == 'edit') && <>
     <label>Name</label>
-    <input key='name' type="text" required onChange={handleNameChange} />
+    <input key='name' type="text" value = {name} required onChange={handleNameChange} />
     <label>Email</label>
-    <input key='email' type="email" required onChange={handleEmailChange} />
+    <input key='email' type="email" value ={email}  required onChange={handleEmailChange} />
     <label>Phone Number</label>
-    <input key='phone' type="phone" required onChange={handlePhoneChange}/>
+    <input key='phone' type="phone" value = {phone} required onChange={handlePhoneChange}/>
     <div>
-      {!submited && <button>Submit
-      </button>}
-      {submited && <button >Edit
-      </button>}
+      <button>Submit</button>
     </div>
+    </>}
+    {(status == 'submitted') && <div><button >Edit
+      </button></div>}
   </form>);
 }
 

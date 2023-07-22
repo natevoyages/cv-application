@@ -1,24 +1,25 @@
+import { useState } from "react";
+
 function Education({schoolStateFn, studyStateFn,
-  startDateStateFn, endDateStateFn,submited,
-   submitSetter, schoolState,
- studyState,
- startDateState, endDateState}){
-  let school = schoolState;
-  let study = studyState;
-  let startDate = startDateState;
-  let endDate = endDateState;
+  startDateStateFn, endDateStateFn,status,
+   submitSetter}){
+    const[school, setSchool] = useState('');
+    const[study, setStudy] = useState('');
+    const[startDate, setStartDate] = useState('');
+    const[endDate, setEndDate] = useState('');
+  
 
   const handleSchoolChange = (e) => {
-    school = e.target.value;
+    setSchool(e.target.value);
   }
   const handleStudyChange = (e) => {
-    study = e.target.value;
+    setStudy(e.target.value);
   }
   const handleStartDateChange = (e) => {
-    startDate = e.target.value;
+    setStartDate(e.target.value);
   }
   const handleEndDateChange = (e) => {
-    endDate = e.target.value;
+    setEndDate(e.target.value);
   }
 
   const handleSubmit = (e) => {
@@ -26,7 +27,12 @@ function Education({schoolStateFn, studyStateFn,
     schoolStateFn(school);
     studyStateFn(study);
     startDateStateFn(startDate);
+    if(endDate == ''){
+      endDateStateFn('present');
+    }
+    else{
     endDateStateFn(endDate);
+    }
     submitSetter();
   }
   
@@ -34,18 +40,21 @@ function Education({schoolStateFn, studyStateFn,
   return(
   <form onSubmit={handleSubmit}>
     <legend>Education Info</legend>
+    {(status == 'edit' || status == 'pending') &&<>
     <label>School</label>
-    <input key='school' type="text" required onChange={handleSchoolChange} />
+    <input key='school' type="text" value = {school} required onChange={handleSchoolChange} />
     <label>Title of Study</label>
-    <input key='study' type="text" required onChange={handleStudyChange} />
+    <input key='study' type="text" value={study} required onChange={handleStudyChange} />
     <label>Start Date</label>
-    <input key='start-date' type="date" required onChange={handleStartDateChange}/>
+    <input key='start-date' type="date" value={startDate} required onChange={handleStartDateChange}/>
     <label>End Date</label>
-    <input key='start-date' type="date" required onChange={handleEndDateChange}/>
+    <input key='start-date' type="date" value={endDate}  onChange={handleEndDateChange}/>
     <div>
-      <button> {!submited ? 'Submit' : 'edit'}
+      <button> Submit
       </button>
-    </div>
+    </div></>}
+    {(status == 'submitted') && <div><button >Edit
+      </button></div>}
   </form>)
 }
 

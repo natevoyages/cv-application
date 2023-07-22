@@ -1,3 +1,4 @@
+import { useState } from "react";
 
 function Experience({            
   companyStateFn,
@@ -5,33 +6,28 @@ function Experience({
   responsibilitiesStateFn,
   startDateStateFn,
   endDateStateFn,
-  submited,
-  submitSetter,
-  companyState,
-  workTitleState,
-  responsibilitiesState,
-  startDateState,
-  endDateState}){
-  let company = companyState;
-  let workTitle = workTitleState;
-  let responsibilities = responsibilitiesState;
-  let startDate = startDateState;
-  let endDate = endDateState;
+  status,
+  submitSetter}){
+    const[company, setCompany] = useState('');
+    const[workTitle, setWorkTitle] = useState('');
+    const[responsibilities, setResponsibilities] = useState('');
+    const[startDate, setStartExpDate] = useState('');
+    const[endDate, setEndExpDate] = useState('');
 
   const handleCompanyChange = (e) => {
-    company = (e.target.value);
+    setCompany(e.target.value);
   }
   const handleWorkTitleChange = (e) => {
-    workTitle = (e.target.value);
+    setWorkTitle(e.target.value);
   }
   const handleResponsibilitiesChange = (e) => {
-    responsibilities = (e.target.value);
+    setResponsibilities(e.target.value);
   }
   const handleStartDateChange = (e) => {
-    startDate = (e.target.value);
+    setStartExpDate(e.target.value);
   }
   const handleEndDateChange = (e) => {
-    endDate = (e.target.value);
+    setEndExpDate(e.target.value);
   }
 
   const handleSubmit = (e) => {
@@ -40,7 +36,12 @@ function Experience({
     workTitleStateFn(workTitle);
     responsibilitiesStateFn(responsibilities);
     startDateStateFn(startDate);
+    if(endDate == ''){
+      endDateStateFn('present');
+    }
+    else{
     endDateStateFn(endDate);
+    }
     submitSetter();
 
   }
@@ -48,19 +49,22 @@ function Experience({
   return(
   <form onSubmit={handleSubmit}>
     <legend>Experience</legend>
+    {(status == 'edit' || status == 'pending') && <>
     <label>Company Name</label>
-    <input key='company' type="text" required onChange={handleCompanyChange} />
+    <input key='company' type="text" value={company} required onChange={handleCompanyChange} />
     <label>Position Title</label>
-    <input key='position' type="text" required onChange={handleWorkTitleChange} />
+    <input key='work-title' type="text" value={workTitle} required onChange={handleWorkTitleChange} />
     <label>Resposibilities</label>
-    <textarea key='responsibilities' type="text" required onChange={handleResponsibilitiesChange} />
+    <textarea key='responsibilities' type="text" value={responsibilities} required onChange={handleResponsibilitiesChange} />
     <label>Start Date</label>
-    <input key='start-date' type="date" required onChange={handleStartDateChange}/>
+    <input key='start-date' type="date" value={startDate} required onChange={handleStartDateChange}/>
     <label>End Date</label>
-    <input key='end-date' type="date" required onChange={handleEndDateChange}/>
+    <input key='end-date' type="date" value={endDate}  onChange={handleEndDateChange}/>
     <div>
-      <button>{!submited ? 'Submit' : 'Edit'}</button>
-    </div>
+      <button>Submit</button>
+    </div> </>}
+    {(status == 'submitted') && <div><button >Edit
+      </button> </div>}
   </form>)
 }
 
