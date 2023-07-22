@@ -1,7 +1,7 @@
 .cv{
     height: inherit;
-    width: calc(50vw - 2em);
-    padding-left:  2em;
+    width: calc(50vw - 4em);
+    padding:  2em;
 }
 
 .name{
